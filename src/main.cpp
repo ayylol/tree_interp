@@ -54,19 +54,28 @@ int main(int argc, char *argv[]) {
     interp_params[A].data = (float)interp_params[A].data +                     \
                             std::get<float>(interp_params[A].step_size);       \
   }
-
+#define RESET(A)                                                               \
+  if (interp_params[A].is_int) {                                               \
+    interp_params[A].data = std::get<int>(interp_params[A].start);             \
+  } else {                                                                     \
+    interp_params[A].data = std::get<float>(interp_params[A].start);           \
+  }
   for (int i = 0; i < interp_params[0].num_steps; i++) {
+    RESET(1);
     for (int j = 0; j < interp_params[1].num_steps; j++) {
-      std::string val1 = interp_params[0].is_int
-                             ? std::to_string((int)interp_params[0].data)
-                             : std::format("{:.2f}", (float)interp_params[0].data);
-      std::string val2 = interp_params[1].is_int
-                             ? std::to_string((int)interp_params[1].data)
-                             : std::format("{:.2f}", (float)interp_params[1].data);
-      std::string file_name =  interp_params[0].name + "-" + val1 + "-" + interp_params[1].name + "-" + val2;
+      std::string val1 =
+          interp_params[0].is_int
+              ? std::to_string((int)interp_params[0].data)
+              : std::to_string((float)interp_params[0].data);
+      std::string val2 =
+          interp_params[1].is_int
+              ? std::to_string((int)interp_params[1].data)
+              : std::to_string((float)interp_params[1].data);
+      std::string file_name = interp_params[0].name + "-" + val1 + "-" +
+                              interp_params[1].name + "-" + val2;
 
-      std::ofstream out((file_name + ".json").c_str());
-      data.at("image_path") = path_prefix + file_name;
+      std::ofstream out(("output/" + file_name + ".json").c_str());
+      data.at("image_path") = path_prefix + file_name + "_";
       out << data;
       out.close();
       STEP(1);
