@@ -11,9 +11,6 @@ SET(CMAKE_CXX_EXTENSIONS OFF)
 
 include_directories("${PROJECT_BINARY_DIR}" libs src)
 
-# Libraries
-set(DEFINITIONS _USE_MATH_DEFINES=1 GLM_FORCE_CXX14=1
-    IMGUI_IMPL_OPENGL_LOADER_CUSTOM="glad/glad.h")
 # Making executable
 # Original sources glob 
 file(GLOB_RECURSE source
